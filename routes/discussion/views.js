@@ -44,9 +44,14 @@ var view_discussion_details_list = function(params, user) {
 
   if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
   Discussion.find(criteria).exec().then(function(discussions) {
-    discussions.deepPopulate('approvedBy', function(err, _discussions) {
+    if(!discussions) {
       deferred.resolve(_discussions);
-    });
+    }
+    else {
+      discussions.deepPopulate('approvedBy', function(err, _discussions) {
+        deferred.resolve(_discussions);
+      });
+    }
   });
   return deferred.promise;
 }
@@ -216,21 +221,26 @@ var view_discussion_details_get = function(params, user) {
   else {
     debugger;
     Discussion.findOne({_id: params.id, state: "Active"}).exec().then(function(discussion) {
-      var idx = discussion.members.indexOf(user._id.toString());
-      debugger;
-      if(idx != -1) {
-        debugger;
-        discussion.deepPopulate('members', function(err, discussion) {
-          debugger;
-          deferred.resolve(discussion);
-        });
-        discussion.deepPopulate('messages', function(err, discussion) {
-          debugger;
-          deferred.resolve(discussion);
-        });
+      if(!discussion) {
+        deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion."}, code:929}));
       }
       else {
-        deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
+        var idx = discussion.members.indexOf(user._id.toString());
+        debugger;
+        if(idx != -1) {
+          debugger;
+          discussion.deepPopulate('members', function(err, discussion) {
+            debugger;
+            deferred.resolve(discussion);
+          });
+          discussion.deepPopulate('messages', function(err, discussion) {
+            debugger;
+            deferred.resolve(discussion);
+          });
+        }
+        else {
+          deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
+        }
       }
     });
   }
