@@ -4,8 +4,9 @@ var Models = {};
 
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
-Models.User = mongoose.model('User', new Schema({
+var userSchema = new Schema({
   username: String,
   role: {
     type: String,
@@ -17,7 +18,9 @@ Models.User = mongoose.model('User', new Schema({
   dateLastLogin: { type: Date },
 	dateLastLogout: { type: Date },
 	details: {}
-}));
+});
+userSchema.plugin(deepPopulate, {});
+Models.User = mongoose.model('User', userSchema);
 
 Models.Token = mongoose.model('Token', new Schema({
 	access_token: String,
@@ -30,22 +33,26 @@ Models.Message = mongoose.model('Message', new Schema({
 	timestamp: { type: Date, default: Date.now }
 }));
 
-Models.Complaint = mongoose.model('Complaint', new Schema({
+var complaintSchema = new Schema({
 	by: { type: Schema.Types.ObjectId, ref: 'User' },
 	caption: String,
 	messages: [ { type: Schema.Types.ObjectId, ref: 'Message' } ],
 	dateCreated: { type: Date, default: Date.now },
 	dateUpdated: { type: Date, default: Date.now },
 	collaborators: [ { type: Schema.Types.ObjectId, ref: 'User' } ]
-}));
+});
+complaintSchema.plugin(deepPopulate, {});
+Models.Complaint = mongoose.model('Complaint', complaintSchema);
 
-Models.Discussion = mongoose.model('Discussion', new Schema({
+var discussionSchema = new Schema({
 	caption: String,
 	members: [ { type: Schema.Types.ObjectId, ref: 'User' } ],
 	messages: [ { type: Schema.Types.ObjectId, ref: 'Message' } ],
 	dateCreated: { type: Date, default: Date.now },
 	dateUpdated: { type: Date, default: Date.now }
-}));
+});
+discussionSchema.plugin(deepPopulate, {});
+Models.Discussion = mongoose.model('Discussion', discussionSchema);
 
 Models.Thing = mongoose.model('Thing', new Schema({
 	type: String,

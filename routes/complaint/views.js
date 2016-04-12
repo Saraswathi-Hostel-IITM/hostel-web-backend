@@ -86,4 +86,4 @@ var view_complaint_details_message = function(params, user) {
   }
 }
 
-global.registry.register('view_complaint_details_message', { post: view_discussion_details_message });
+global.registry.register('view_complaint_details_message', { post: view_complaint_details_message });

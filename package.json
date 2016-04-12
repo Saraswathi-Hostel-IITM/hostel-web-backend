@@ -11,6 +11,7 @@
     "debug": "~2.1.1",
     "express": "~4.12.2",
     "jade": "~1.9.2",
+    "mongoose-deep-populate": "^3.0.0",
     "morgan": "~1.5.1",
     "multer": "^0.1.8",
     "serve-favicon": "~2.2.0"
