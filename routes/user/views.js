@@ -26,7 +26,8 @@ var view_user_details_create = function(params , user) {
 				// Create user from RAW params
 				var user = new User(params);
 				user.save();
-				user.delete('password');
+
+				delete user.password;
 				deferred.resolve({ user: user });
 			}
 		});
@@ -72,7 +73,7 @@ var view_user_details_login = function(params) {
 					deferred.reject(err);
 				});
 
-				user.delete('password');
+				delete user.password;
 
 				deferred.resolve({access_token:access_token, user: user});
 			}
@@ -141,7 +142,7 @@ var view_user_details_update = function(params, user) {
 				deferred.reject(err);
 			});
 
-			user.delete('password');
+			delete user.password;
 			deferred.resolve({ user: user });
 		}
 		else {
