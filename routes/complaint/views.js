@@ -36,6 +36,8 @@ var view_complaint_details_create = function(params, user) {
       deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
     }
   }
+
+  return deferred.promise;
 }
 
 global.registry.register('view_complaint_details_create', { post: view_complaint_details_create });
@@ -47,6 +49,8 @@ var view_complaint_details_list = function(params, user) {
   Complaint.find().exec().then(function(complaints) {
     deferred.resolve(complaints);
   });
+
+  return deferred.promise;
 }
 
 global.registry.register('view_complaint_details_list', { get: view_complaint_details_list });
@@ -84,6 +88,8 @@ var view_complaint_details_message = function(params, user) {
       }
     });
   }
+
+  return deferred.promise;
 }
 
 global.registry.register('view_complaint_details_message', { post: view_complaint_details_message });
