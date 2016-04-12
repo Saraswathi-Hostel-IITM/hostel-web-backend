@@ -40,7 +40,7 @@ var view_discussion_details_list = function(params, user) {
   var deferred = Q.defer();
 
   var Discussion = global.registry.getSharedObject("models").Discussion;
-  var criteria = {};
+  var criteria = { state: "Active" };
 
   if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
   Discussion.find(criteria).exec().then(function(discussions) {
@@ -67,7 +67,7 @@ var view_discussion_details_approve = function(params, user) {
     deferred.resolve(errObj);
   }
   else if(user && user.role === "Admin") {
-    Discussion.find({_id: params.id}).exec().then(function(discussion) {
+    Discussion.find({_id: params.id, state: "Active"}).exec().then(function(discussion) {
       if(!discussion) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion."}, code:929}));
       }
@@ -102,7 +102,7 @@ var view_discussion_details_join = function(params, user){
     deferred.resolve(errObj);
   }
   else{
-    Discussion.findOne({_id: params.id}).exec().then(function(discussion){
+    Discussion.findOne({_id: params.id, state: "Active"}).exec().then(function(discussion){
       if(!discussion){
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion group."}, code:452}));
       }
@@ -136,7 +136,7 @@ var view_discussion_details_message = function(params, user) {
 		deferred.resolve(errObj);
 	}
   else {
-    Discussion.findOne({ _id: params.id }).exec().then(function(discussion) {
+    Discussion.findOne({ _id: params.id, state: "Active" }).exec().then(function(discussion) {
       if(!discussion) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such discussion group."}, code:452 }));
       }
@@ -160,7 +160,7 @@ var view_discussion_details_message = function(params, user) {
 
 global.registry.register('view_discussion_details_message', { post: view_discussion_details_message });
 
-var view_discussion_details_remove = function(params, user){
+var view_discussion_details_exit = function(params, user){
   var deferred = Q.defer();
 
   var Discussion = global.registry.getSharedObject("models").Discussion;
@@ -174,7 +174,7 @@ var view_discussion_details_remove = function(params, user){
     deferred.resolve(errObj);
   }
   else{
-    Discussion.findOne({_id: params.id}).exec().then(function(discussion){
+    Discussion.findOne({_id: params.id, state: "Active"}).exec().then(function(discussion){
       if(!discussion){
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion group."}, code:452}));
       }
@@ -195,7 +195,7 @@ var view_discussion_details_remove = function(params, user){
   return deferred.promise;
 }
 
-global.registry.register('view_discussion_details_remove', {post: view_discussion_details_remove});
+global.registry.register('view_discussion_details_exit', {post: view_discussion_details_exit});
 
 var view_discussion_details_get = function(params, user) {
   var deferred = Q.defer();
@@ -215,7 +215,7 @@ var view_discussion_details_get = function(params, user) {
   }
   else {
     debugger;
-    Discussion.findOne({_id: params.id}).exec().then(function(discussion) {
+    Discussion.findOne({_id: params.id, state: "Active"}).exec().then(function(discussion) {
       var idx = discussion.members.indexOf(user._id.toString());
       debugger;
       if(idx != -1) {
