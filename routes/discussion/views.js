@@ -224,6 +224,10 @@ var view_discussion_details_get = function(params, user) {
           debugger;
           deferred.resolve(discussion);
         });
+        discussion.deepPopulate('messages', function(err, discussion) {
+          debugger;
+          deferred.resolve(discussion);
+        });
       }
       else {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
