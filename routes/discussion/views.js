@@ -20,6 +20,7 @@ var view_discussion_details_create = function(params, user) {
     debugger;
     if(user && user.role === "Admin") {
       var discussion = new Discussion({caption: params.caption});
+      if(discussion.approvedBy) delete discussion.approvedBy;
       discussion.members.push(user._id.toString());
       discussion.markModified("members");
       discussion.save();
@@ -39,13 +40,53 @@ var view_discussion_details_list = function(params, user) {
   var deferred = Q.defer();
 
   var Discussion = global.registry.getSharedObject("models").Discussion;
-  Discussion.find().exec().then(function(discussions) {
-    deferred.resolve(discussions);
+  var criteria = {};
+
+  if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+  Discussion.find(criteria).exec().then(function(discussions) {
+    discussions.deepPopulate('approvedBy', function(err, _discussions) {
+      deferred.resolve(_discussions);
+    });
   });
   return deferred.promise;
 }
 
 global.registry.register('view_discussion_details_list', { get: view_discussion_details_list });
+
+var view_discussion_details_approve = function(params, user) {
+  var deferred = Q.defer();
+
+  var Discussion = global.registry.getSharedObject("models").Discussion;
+  var User = global.registry.getSharedObject("models").User;
+
+  var error = global.registry.getSharedObject("error_util");
+  var errObj = error.err_insuff_params(params, ["access_token","id"]);
+
+  if(errObj){
+    //throw error here
+    deferred.resolve(errObj);
+  }
+  else if(user && user.role === "Admin") {
+    Discussion.find({_id: params.id}).exec().then(function(discussion) {
+      if(!discussion) {
+        deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion."}, code:929}));
+      }
+      else if(!discussion.approvedBy) {
+        discussion.approvedBy = user._id.toString();
+        deferred.resolve(discussion);
+      }
+      else {
+        deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"This discussion is already approved."}, code:387}));
+      }
+    });
+  }
+  else {
+    deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
+  }
+  return deferred.promise;
+}
+
+global.registry.register('view_discussion_details_approve', { post: view_discussion_details_approve });
 
 var view_discussion_details_join = function(params, user){
   var deferred = Q.defer();

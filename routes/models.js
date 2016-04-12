@@ -36,6 +36,7 @@ Models.Message = mongoose.model('Message', new Schema({
 var complaintSchema = new Schema({
 	by: { type: Schema.Types.ObjectId, ref: 'User' },
 	caption: String,
+  approvedBy: ObjectId,
 	messages: [ { type: Schema.Types.ObjectId, ref: 'Message' } ],
 	dateCreated: { type: Date, default: Date.now },
 	dateUpdated: { type: Date, default: Date.now },
@@ -46,6 +47,7 @@ Models.Complaint = mongoose.model('Complaint', complaintSchema);
 
 var discussionSchema = new Schema({
 	caption: String,
+  approvedBy: { type: Schema.Types.ObjectId, ref: 'User' },
 	members: [ { type: Schema.Types.ObjectId, ref: 'User' } ],
 	messages: [ { type: Schema.Types.ObjectId, ref: 'Message' } ],
 	dateCreated: { type: Date, default: Date.now },
