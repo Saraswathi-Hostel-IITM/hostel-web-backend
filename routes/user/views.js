@@ -1,7 +1,7 @@
 var Q = require("q");
 var ObjectId = require("mongoose").Types.ObjectId;
 var hat = require('hat');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var view_user_details_create = function(params , user) {
 	var deferred = Q.defer();
@@ -75,7 +75,9 @@ var view_user_details_login = function(params) {
 					deferred.reject(err);
 				});
 
+				user = user.toJSON();
 				delete user.password;
+				debugger;
 
 				deferred.resolve({access_token:access_token, user: user});
 			}
@@ -141,6 +143,7 @@ var view_user_details_update = function(params, user) {
 			}
 			if(params.data.details) {
 				user.details = _.merge(user.details, params.data.details);
+				debugger;
 				user.markModified("details");
 			}
 			user.dateUpdated = new Date();
@@ -148,6 +151,7 @@ var view_user_details_update = function(params, user) {
 				deferred.reject(err);
 			});
 
+			user = user.toJSON();
 			delete user.password;
 			deferred.resolve({ user: user });
 		}
