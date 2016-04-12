@@ -1,6 +1,7 @@
 var Q = require("q");
 var ObjectId = require("mongoose").Types.ObjectId;
 var hat = require('hat');
+var _ = require('underscore');
 
 var view_user_details_create = function(params , user) {
 	var deferred = Q.defer();
@@ -25,6 +26,7 @@ var view_user_details_create = function(params , user) {
 			else {
 				// Create user from RAW params
 				var user = new User(params);
+				user.role = 'user';
 				user.save();
 
 				delete user.password;
@@ -136,6 +138,10 @@ var view_user_details_update = function(params, user) {
 		if(user) {
 			if(params.data.password) {
 				user.password = params.data.password;
+			}
+			if(params.data.details) {
+				user.details = _.merge(user.details, params.data.details);
+				user.markModified("details");
 			}
 			user.dateUpdated = new Date();
 			user.save(function(err) {
