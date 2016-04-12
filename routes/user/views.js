@@ -8,7 +8,7 @@ var view_user_details_create = function(params , user) {
 	var User = global.registry.getSharedObject("models").User;
 
 	var error = global.registry.getSharedObject('error_util');
-	var errObj = error.err_insuff_params(params, ["username", "password", "linked_to", "type"]);
+	var errObj = error.err_insuff_params(params, ["username", "password", "details"]);
 
 	debugger;
 
@@ -16,37 +16,18 @@ var view_user_details_create = function(params , user) {
 		//throw error here
 		deferred.resolve(errObj);
 	}
-	else if(!(params.type == "Hospital" || params.type == "Doctor")) {
-		debugger;
-		deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Invalid type requested"}, code:221 }));
-	}
 	else {
 		debugger;
-
 		User.find({ username: params.username }).exec().then(function(_users) {
-			if(_users.length) {	
+			if(_users.length) {
 				deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Such a username already exists. Please choose a different username."}, code:135 }));
 			}
 			else {
-				var user = new User();
-				user.username = params.username;
-				user.password = params.password;
-				user.linkedTo = new ObjectId(params.linked_to.toString());
-				user.type = params.type;
-				user.dateCreated = new Date();
-				user.dateUpdated = user.dateCreated;
-				if(params.profile_picture) {
-					user.profilePicture = params.profile_picture;
-				}
-				if(params.details) {
-					doctor.details = JSON.parse(params.details);
-				}
-
-				user.save(function(err) {
-					deferred.reject(err);
-				});
-
-				deferred.resolve({user:{_id:user._id, username:user.username, linkedTo:user.linkedTo, profilePicture: user.profilePicture, type: user.type}, created:true});
+				// Create user from RAW params
+				var user = new User(params);
+				user.save();
+				user.delete('password');
+				deferred.resolve({ user: user });
 			}
 		});
 	}
@@ -76,7 +57,6 @@ var view_user_details_login = function(params) {
 				deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Incorrect username/password"}, code:345 }));
 			}
 			if(params.password == user.password) {
-
 				user.dateLastLogin = new Date();
 				user.save(function(err) {
 					deferred.reject(err);
@@ -92,7 +72,9 @@ var view_user_details_login = function(params) {
 					deferred.reject(err);
 				});
 
-				deferred.resolve({access_token:access_token, user:{_id:user._id, username:user.username, linkedTo:user.linkedTo, profilePicture:user.profilePicture, type: user.type}});
+				user.delete('password');
+
+				deferred.resolve({access_token:access_token, user: user);
 			}
 			else {
 				deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Incorrect username/password"}, code:345 }));
@@ -154,15 +136,13 @@ var view_user_details_update = function(params, user) {
 			if(params.data.password) {
 				user.password = params.data.password;
 			}
-			if(params.data.profile_picture) {
-				user.profilePicture = params.data.profile_picture;
-			}
 			user.dateUpdated = new Date();
 			user.save(function(err) {
 				deferred.reject(err);
 			});
 
-			deferred.resolve({user:{_id:user._id, username:user.username, linkedTo:user.linkedTo, profilePicture: user.profilePicture, type: user.type}, updated:true});
+			user.delete('password');
+			deferred.resolve({ user: user });
 		}
 		else {
 			deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such user."}, code:109 }));

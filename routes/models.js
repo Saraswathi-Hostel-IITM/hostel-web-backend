@@ -6,15 +6,12 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 Models.User = mongoose.model('User', new Schema({
-  name: String,
-  email: { type: String, lowercase: true },
+  username: String,
   role: {
     type: String,
     default: 'user'
   },
-  hashedPassword: String,
-  provider: String,
-  salt: String,
+  password: String,
   dateCreated: { type: Date, default: Date.now },
 	dateUpdated: { type: Date, default: Date.now },
   dateLastLogin: { type: Date },

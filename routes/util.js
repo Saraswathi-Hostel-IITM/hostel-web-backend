@@ -1,7 +1,9 @@
 var filterParams = function(params, arr) {
 	var obj = {};
 	for(var i=0;i<arr.length;i++) {
-		obj[arr[i]] = params[arr[i]];
+		if(params[arr[i]]) {
+			obj[arr[i]] = params[arr[i]];
+		}
 	}
 	return obj;
 }
