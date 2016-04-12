@@ -48,7 +48,7 @@ app.use(multer({}));
   var view = req.params.view;
 
   if( !registry ){
-    logger.err();   
+    logger.err();
   }
 
   var httpObjView = registry.getSharedObject( "view_" + dataClass + "_" + handler + "_" + view );
@@ -110,7 +110,7 @@ app.use(multer({}));
   debugger;
 
   if( !registry ){
-    logger.err();   
+    logger.err();
   }
 
   var httpObjView = registry.getSharedObject( "view_" + dataClass + "_" + handler + "_" + view );

@@ -74,7 +74,7 @@ var view_user_details_login = function(params) {
 
 				user.delete('password');
 
-				deferred.resolve({access_token:access_token, user: user);
+				deferred.resolve({access_token:access_token, user: user});
 			}
 			else {
 				deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Incorrect username/password"}, code:345 }));

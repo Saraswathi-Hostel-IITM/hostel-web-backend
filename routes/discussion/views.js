@@ -18,7 +18,7 @@ var view_discussion_details_create = function(params, user) {
 	}
   else {
     debugger;
-    if(user.role === "Admin") {
+    if(user && user.role === "Admin") {
       var discussion = new Discussion({caption: caption});
       discussion.members.push(user._id.toString());
       discussion.markModified("members");
@@ -63,7 +63,7 @@ var view_discussion_details_join = function(params, user){
       if(!discussion){
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion group."}, code:452}));
       }
-      else if(discussion.members.indexOf(user._id.toString()) == -1){
+      else if(!user){
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
       }
       else{
@@ -94,7 +94,7 @@ var view_discussion_details_message = function(params, user) {
       if(!discussion) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such discussion group."}, code:452 }));
       }
-      else if(discussion.members.indexOf(user._id.toString()) == -1) {
+      else if(user && discussion.members.indexOf(user._id.toString()) == -1) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
       }
       else {
