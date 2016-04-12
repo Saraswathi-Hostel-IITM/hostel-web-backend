@@ -8,7 +8,7 @@ var view_discussion_details_create = function(params, user) {
   var Discussion = global.registry.getSharedObject("models").Discussion;
 
   var error = global.registry.getSharedObject('error_util');
-	var errObj = error.err_insuff_params(params, ["caption"]);
+	var errObj = error.err_insuff_params(params, ["caption", "access_token"]);
 
 	debugger;
 
@@ -19,7 +19,7 @@ var view_discussion_details_create = function(params, user) {
   else {
     debugger;
     if(user && user.role === "Admin") {
-      var discussion = new Discussion({caption: caption});
+      var discussion = new Discussion({caption: params.caption});
       discussion.members.push(user._id.toString());
       discussion.markModified("members");
       discussion.save();
@@ -30,6 +30,7 @@ var view_discussion_details_create = function(params, user) {
       deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
     }
   }
+  return deferred.promise;
 }
 
 global.registry.register('view_discussion_details_create', { post: view_discussion_details_create });
@@ -41,6 +42,7 @@ var view_discussion_details_list = function(params, user) {
   Discussion.find().exec().then(function(discussions) {
     deferred.resolve(discussions);
   });
+  return deferred.promise;
 }
 
 global.registry.register('view_discussion_details_list', { get: view_discussion_details_list });
@@ -72,8 +74,9 @@ var view_discussion_details_join = function(params, user){
         discussion.save();
         deferred.resolve(discussion.members);
       }
-    })
+    });
   }
+  return deferred.promise;
 }
 
 global.registry.register('view_discussion_details_join', {post: view_discussion_details_join});
@@ -111,6 +114,82 @@ var view_discussion_details_message = function(params, user) {
       }
     });
   }
+  return deferred.promise;
 }
 
 global.registry.register('view_discussion_details_message', { post: view_discussion_details_message });
+
+var view_discussion_details_remove = function(params, user){
+  var deferred = Q.defer();
+
+  var Discussion = global.registry.getSharedObject("models").Discussion;
+  var User = global.registry.getSharedObject("models").User;
+
+  var error = global.registry.getSharedObject("error_util");
+  var errObj = error.err_insuff_params(params, ["access_token","id"]);
+
+  if(errObj){
+    //throw error here
+    deferred.resolve(errObj);
+  }
+  else{
+    Discussion.findOne({_id: params.id}).exec().then(function(discussion){
+      if(!discussion){
+        deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion group."}, code:452}));
+      }
+      else if(!user){
+        deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
+      }
+      else {
+        var idx = discussion.members.indexOf(user._id.toString());
+        if(idx != -1) {
+          discussion.members.splice(idx, 1);
+          discussion.markModified("members");
+          discussion.save();
+        }
+        deferred.resolve(discussion.members);
+      }
+    });
+  }
+  return deferred.promise;
+}
+
+global.registry.register('view_discussion_details_remove', {post: view_discussion_details_remove});
+
+var view_discussion_details_get = function(params, user) {
+  var deferred = Q.defer();
+
+  var Discussion = global.registry.getSharedObject("models").Discussion;
+  var User = global.registry.getSharedObject("models").User;
+
+  var error = global.registry.getSharedObject("error_util");
+  var errObj = error.err_insuff_params(params, ["access_token","id"]);
+
+  if(errObj){
+    //throw error here
+    deferred.resolve(errObj);
+  }
+  else if(!user) {
+    deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
+  }
+  else {
+    debugger;
+    Discussion.findOne({_id: params.id}).exec().then(function(discussion) {
+      var idx = discussion.members.indexOf(user._id.toString());
+      debugger;
+      if(idx != -1) {
+        debugger;
+        discussion.deepPopulate('members', function(err, discussion) {
+          debugger;
+          deferred.resolve(discussion);
+        });
+      }
+      else {
+        deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"Permission denied"}, code:909}));
+      }
+    });
+  }
+  return deferred.promise;
+}
+
+global.registry.register('view_discussion_details_get', { get: view_discussion_details_get });
