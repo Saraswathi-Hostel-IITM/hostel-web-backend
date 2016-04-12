@@ -76,6 +76,8 @@ var view_discussion_details_join = function(params, user){
   }
 }
 
+global.registry.register('view_discussion_details_join', {post: view_discussion_details_join});
+
 var view_discussion_details_message = function(params, user) {
   var deferred = Q.defer();
 
