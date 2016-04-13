@@ -42,13 +42,23 @@ var view_discussion_details_list = function(params, user) {
   var Discussion = global.registry.getSharedObject("models").Discussion;
   var criteria = { state: "Active" };
 
-  if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+  if(user && user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+  console.log(criteria);
   Discussion.find(criteria).exec().then(function(discussions) {
-    if(!discussions) {
-      deferred.resolve(_discussions);
+    if(!discussions.length) {
+      deferred.resolve(discussions);
     }
     else {
-      discussions.deepPopulate('approvedBy', function(err, _discussions) {
+      debugger;
+      var plist = [];
+      for(var i=0; i < discussions.length; ++i) {
+        if(discussions[i]['approvedBy']) {
+          var p = discussions[i].deepPopulate('approvedBy');
+          plist.push(p);
+        }
+      }
+      debugger;
+      Q.all(plist).then(function(_discussions) {
         deferred.resolve(_discussions);
       });
     }
@@ -72,12 +82,13 @@ var view_discussion_details_approve = function(params, user) {
     deferred.resolve(errObj);
   }
   else if(user && user.role === "Admin") {
-    Discussion.find({_id: params.id, state: "Active"}).exec().then(function(discussion) {
+    Discussion.findOne({_id: params.id, state: "Active"}).exec().then(function(discussion) {
       if(!discussion) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion."}, code:929}));
       }
       else if(!discussion.approvedBy) {
         discussion.approvedBy = user._id.toString();
+        discussion.save();
         deferred.resolve(discussion);
       }
       else {
@@ -229,11 +240,7 @@ var view_discussion_details_get = function(params, user) {
         debugger;
         if(idx != -1) {
           debugger;
-          discussion.deepPopulate('members', function(err, discussion) {
-            debugger;
-            deferred.resolve(discussion);
-          });
-          discussion.deepPopulate('messages', function(err, discussion) {
+          discussion.deepPopulate('members messages messages.by approvedBy', function(err, discussion) {
             debugger;
             deferred.resolve(discussion);
           });
