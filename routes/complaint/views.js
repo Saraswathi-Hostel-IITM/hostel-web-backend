@@ -24,7 +24,7 @@ var view_complaint_details_create = function(params, user) {
       delete params.access_token;
       delete params.description;
       var complaint = new Complaint(params);
-      var message = new Message(desc);
+      var message = new Message({by: user._id.toString(), text: desc});
       message.save();
       complaint.messages.push(message._id.toString());
       complaint.by = user._id.toString();
@@ -49,10 +49,27 @@ var view_complaint_details_list = function(params, user) {
   var criteria = {state: 'Active'};
 
   if(user && user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+  debugger;
   Complaint.find(criteria).exec().then(function(complaints) {
-    complaints.deepPopulate('approvedBy', function(err, _complaints) {
-      deferred.resolve(_complaints);
-    });
+    debugger;
+    if(!complaints.length) {
+      debugger;
+      deferred.resolve(complaints);
+    }
+    else {
+      debugger;
+      var plist = [];
+      for(var i=0; i < complaints.length; ++i) {
+        if(complaints[i]['approvedBy']) {
+          var p = complaints[i].deepPopulate('approvedBy');
+          plist.push(p);
+        }
+      }
+      debugger;
+      Q.all(plist).then(function(_complaints) {
+        deferred.resolve(_complaints);
+      });
+    }
   });
 
   return deferred.promise;
@@ -74,12 +91,13 @@ var view_complaint_details_approve = function(params, user) {
     deferred.resolve(errObj);
   }
   else if(user && user.role === "Admin") {
-    Complaint.find({_id: params.id, state: "Active"}).exec().then(function(complaint) {
+    Complaint.findOne({_id: params.id, state: "Active"}).exec().then(function(complaint) {
       if(!complaint) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such complaint."}, code:929}));
       }
       else if(!complaint.approvedBy) {
         complaint.approvedBy = user._id.toString();
+        complaint.save();
         deferred.resolve(complaint);
       }
       else {
@@ -113,11 +131,12 @@ var view_complaint_details_message = function(params, user) {
       if(!complaint) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such complaint."}, code:452 }));
       }
-      else if(complaint.by != user._id && complaint.collaborators.indexOf(user._id) == -1) {
+      else if(user && complaint.by != user._id && complaint.collaborators.indexOf(user._id) == -1) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
       }
       else {
         var message = new Message(params.message);
+        message.by = user._id.toString();
         message.save();
         complaint.messages.push(message._id.toString());
 
@@ -151,14 +170,10 @@ var view_complaint_details_get = function(params, user) {
   else {
     debugger;
     Complaint.findOne({_id: params.id, state: "Active"}).exec().then(function(complaint) {
-      complaint.deepPopulate('members', function(err, complaint) {
+      complaint.deepPopulate('collaborators messages messages.by approvedBy', function(err, complaint) {
           debugger;
           deferred.resolve(complaint);
-        });
-      complaint.deepPopulate('messages', function(err, complaint) {
-          debugger;
-          deferred.resolve(complaint);
-        });
+      });
     });
   }
   return deferred.promise;
@@ -197,4 +212,4 @@ var view_complaint_details_delete = function(params, user) {
   return deferred.promise;
 }
 
-global.registry.register('view_complaint_details_message', { post: view_complaint_details_message });
+global.registry.register('view_complaint_details_delete', { post: view_complaint_details_delete });
