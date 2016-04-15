@@ -48,29 +48,46 @@ var view_complaint_details_list = function(params, user) {
   var Complaint = global.registry.getSharedObject("models").Complaint;
   var criteria = {state: 'Active'};
 
-  if(user && user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+  var error = global.registry.getSharedObject('error_util');
+  var errObj = error.err_insuff_params(params, ["access_token"]);
+
   debugger;
-  Complaint.find(criteria).exec().then(function(complaints) {
-    debugger;
-    if(!complaints.length) {
+
+  if(errObj) {
+    //throw error here
+    deferred.resolve(errObj);
+  }
+
+  else{
+    if(user){
+      if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
       debugger;
-      deferred.resolve(complaints);
-    }
-    else {
-      debugger;
-      var plist = [];
-      for(var i=0; i < complaints.length; ++i) {
-        if(complaints[i]['approvedBy']) {
-          var p = complaints[i].deepPopulate('approvedBy');
-          plist.push(p);
+      Complaint.find(criteria).exec().then(function(complaints) {
+        debugger;
+        if(!complaints.length) {
+          debugger;
+          deferred.resolve(complaints);
         }
-      }
-      debugger;
-      Q.all(plist).then(function(_complaints) {
-        deferred.resolve(_complaints);
+        else {
+          debugger;
+          var plist = [];
+          for(var i=0; i < complaints.length; ++i) {
+            if(complaints[i]['approvedBy']) {
+              var p = complaints[i].deepPopulate('approvedBy');
+              plist.push(p);
+            }
+          }
+          debugger;
+          Q.all(plist).then(function(_complaints) {
+            deferred.resolve(_complaints);
+          });
+        }
       });
     }
-  });
+    else{
+      deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
+    }
+  }
 
   return deferred.promise;
 }

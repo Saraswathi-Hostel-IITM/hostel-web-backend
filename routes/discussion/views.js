@@ -18,7 +18,7 @@ var view_discussion_details_create = function(params, user) {
 	}
   else {
     debugger;
-    if(user && user.role === "Admin") {
+    if(user) {
       var discussion = new Discussion({caption: params.caption});
       if(discussion.approvedBy) delete discussion.approvedBy;
       discussion.members.push(user._id.toString());
@@ -42,27 +42,43 @@ var view_discussion_details_list = function(params, user) {
   var Discussion = global.registry.getSharedObject("models").Discussion;
   var criteria = { state: "Active" };
 
-  if(user && user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
-  console.log(criteria);
-  Discussion.find(criteria).exec().then(function(discussions) {
-    if(!discussions.length) {
-      deferred.resolve(discussions);
-    }
-    else {
-      debugger;
-      var plist = [];
-      for(var i=0; i < discussions.length; ++i) {
-        if(discussions[i]['approvedBy']) {
-          var p = discussions[i].deepPopulate('approvedBy');
-          plist.push(p);
+  var error = global.registry.getSharedObject('error_util');
+  var errObj = error.err_insuff_params(params, ["access_token"]);
+
+  debugger;
+
+  if(errObj) {
+    //throw error here
+    deferred.resolve(errObj);
+  }
+  else{
+    if(user){
+      if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+      console.log(criteria);
+      Discussion.find(criteria).exec().then(function(discussions) {
+        if(!discussions.length) {
+          deferred.resolve(discussions);
         }
-      }
-      debugger;
-      Q.all(plist).then(function(_discussions) {
-        deferred.resolve(_discussions);
+        else {
+          debugger;
+          var plist = [];
+          for(var i=0; i < discussions.length; ++i) {
+            if(discussions[i]['approvedBy']) {
+              var p = discussions[i].deepPopulate('approvedBy');
+              plist.push(p);
+            }
+          }
+          debugger;
+          Q.all(plist).then(function(_discussions) {
+            deferred.resolve(_discussions);
+          });
+        }
       });
     }
-  });
+    else{
+      deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
+    }
+  }
   return deferred.promise;
 }
 
