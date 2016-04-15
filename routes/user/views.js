@@ -27,6 +27,8 @@ var view_user_details_create = function(params , user) {
 				// Create user from RAW params
 				var user = new User(params);
 				user.role = 'user';
+				if(params.role)
+					user.role = params.role;
 				user.save();
 
 				delete user.password;

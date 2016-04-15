@@ -51,6 +51,7 @@ var view_discussion_details_list = function(params, user) {
     //throw error here
     deferred.resolve(errObj);
   }
+  
   else{
     if(user){
       if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
