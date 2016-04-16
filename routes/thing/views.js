@@ -37,20 +37,12 @@ var view_thing_details_get = function(params) {
 
   var Thing = global.registry.getSharedObject("models").Thing;
 
-  var error = global.registry.getSharedObject('error_util');
-	var errObj = error.err_insuff_params(params, ["criteria"]);
-
-	debugger;
-
-	if(errObj) {
-		//throw error here
-		deferred.resolve(errObj);
+	if(!params.criteria) {
+    params.criteria = {};
 	}
-  else {
-    Thing.find(params.criteria).exec().then(function(things) {
+  Thing.find(params.criteria).exec().then(function(things) {
       deferred.resolve(things);
-    });
-  }
+  });
 
   return deferred.promise;
 }
