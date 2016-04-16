@@ -54,8 +54,8 @@ var view_discussion_details_list = function(params, user) {
   
   else{
     if(user){
-      if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
-      console.log(criteria);
+      // if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+      // console.log(criteria);
       Discussion.find(criteria).exec().then(function(discussions) {
         if(!discussions.length) {
           deferred.resolve(discussions);
@@ -103,7 +103,8 @@ var view_discussion_details_approve = function(params, user) {
       if(!discussion) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion."}, code:929}));
       }
-      else if(!discussion.approvedBy) {
+      else if(discussion.status !== "Approved") {
+	discussion.status = "Approved";
         discussion.approvedBy = user._id.toString();
         discussion.save();
         deferred.resolve(discussion);
@@ -173,7 +174,7 @@ var view_discussion_details_message = function(params, user) {
       if(!discussion) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such discussion group."}, code:452 }));
       }
-      else if(user && discussion.members.indexOf(user._id.toString()) == -1) {
+      else if(!user || discussion.status !== "Approved" || discussion.members.indexOf(user._id.toString()) == -1) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
       }
       else {

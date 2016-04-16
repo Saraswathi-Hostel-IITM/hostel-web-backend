@@ -37,6 +37,7 @@ var complaintSchema = new Schema({
 	by: { type: Schema.Types.ObjectId, ref: 'User' },
 	caption: String,
   approvedBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  status: { type: String, default: "Pending" },
   state: { type: String, default: "Active" },
 	messages: [ { type: Schema.Types.ObjectId, ref: 'Message' } ],
 	dateCreated: { type: Date, default: Date.now },
@@ -49,6 +50,7 @@ Models.Complaint = mongoose.model('Complaint', complaintSchema);
 var discussionSchema = new Schema({
 	caption: String,
   approvedBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  status: { type: String, default: "Pending" },
   state: { type: String, default: "Active" },
 	members: [ { type: Schema.Types.ObjectId, ref: 'User' } ],
 	messages: [ { type: Schema.Types.ObjectId, ref: 'Message' } ],

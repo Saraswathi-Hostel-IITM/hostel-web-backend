@@ -60,7 +60,7 @@ var view_complaint_details_list = function(params, user) {
 
   else{
     if(user){
-      if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
+      // if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
       debugger;
       Complaint.find(criteria).exec().then(function(complaints) {
         debugger;
@@ -112,7 +112,8 @@ var view_complaint_details_approve = function(params, user) {
       if(!complaint) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such complaint."}, code:929}));
       }
-      else if(!complaint.approvedBy) {
+      else if(complaint.status !== "Approved") {
+	complaint.status = "Approved";
         complaint.approvedBy = user._id.toString();
         complaint.save();
         deferred.resolve(complaint);
@@ -148,7 +149,7 @@ var view_complaint_details_message = function(params, user) {
       if(!complaint) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such complaint."}, code:452 }));
       }
-      else if(user && complaint.by != user._id && complaint.collaborators.indexOf(user._id) == -1) {
+      else if(!user || complaint.status !== "Approved" || complaint.by.toString() !== user._id.toString() || complaint.collaborators.indexOf(user._id) == -1) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
       }
       else {

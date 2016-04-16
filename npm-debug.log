@@ -1,0 +1,340 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/aravind/.nvm/v0.10.36/bin/node',
+1 verbose cli   '/home/aravind/.nvm/v0.10.36/bin/npm',
+1 verbose cli   'install' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.36
+4 verbose readDependencies using package.json deps
+5 verbose install where, deps [ '/home/aravind/Desktop/myproj/hostel-web-backend',
+5 verbose install   [ 'body-parser',
+5 verbose install     'cookie-parser',
+5 verbose install     'debug',
+5 verbose install     'express',
+5 verbose install     'jade',
+5 verbose install     'mongoose-deep-populate',
+5 verbose install     'morgan',
+5 verbose install     'multer',
+5 verbose install     'serve-favicon',
+5 verbose install     'underscore' ] ]
+6 info preinstall hostel-web@0.0.0
+7 verbose readDependencies using package.json deps
+8 verbose cache add [ 'body-parser@~1.12.0', null ]
+9 verbose cache add name=undefined spec="body-parser@~1.12.0" args=["body-parser@~1.12.0",null]
+10 verbose parsed url { protocol: null,
+10 verbose parsed url   slashes: null,
+10 verbose parsed url   auth: null,
+10 verbose parsed url   host: null,
+10 verbose parsed url   port: null,
+10 verbose parsed url   hostname: null,
+10 verbose parsed url   hash: null,
+10 verbose parsed url   search: null,
+10 verbose parsed url   query: null,
+10 verbose parsed url   pathname: 'body-parser@~1.12.0',
+10 verbose parsed url   path: 'body-parser@~1.12.0',
+10 verbose parsed url   href: 'body-parser@~1.12.0' }
+11 verbose cache add [ 'cookie-parser@~1.3.4', null ]
+12 verbose cache add name=undefined spec="cookie-parser@~1.3.4" args=["cookie-parser@~1.3.4",null]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: 'cookie-parser@~1.3.4',
+13 verbose parsed url   path: 'cookie-parser@~1.3.4',
+13 verbose parsed url   href: 'cookie-parser@~1.3.4' }
+14 verbose cache add [ 'debug@~2.1.1', null ]
+15 verbose cache add name=undefined spec="debug@~2.1.1" args=["debug@~2.1.1",null]
+16 verbose parsed url { protocol: null,
+16 verbose parsed url   slashes: null,
+16 verbose parsed url   auth: null,
+16 verbose parsed url   host: null,
+16 verbose parsed url   port: null,
+16 verbose parsed url   hostname: null,
+16 verbose parsed url   hash: null,
+16 verbose parsed url   search: null,
+16 verbose parsed url   query: null,
+16 verbose parsed url   pathname: 'debug@~2.1.1',
+16 verbose parsed url   path: 'debug@~2.1.1',
+16 verbose parsed url   href: 'debug@~2.1.1' }
+17 verbose cache add [ 'express@~4.12.2', null ]
+18 verbose cache add name=undefined spec="express@~4.12.2" args=["express@~4.12.2",null]
+19 verbose parsed url { protocol: null,
+19 verbose parsed url   slashes: null,
+19 verbose parsed url   auth: null,
+19 verbose parsed url   host: null,
+19 verbose parsed url   port: null,
+19 verbose parsed url   hostname: null,
+19 verbose parsed url   hash: null,
+19 verbose parsed url   search: null,
+19 verbose parsed url   query: null,
+19 verbose parsed url   pathname: 'express@~4.12.2',
+19 verbose parsed url   path: 'express@~4.12.2',
+19 verbose parsed url   href: 'express@~4.12.2' }
+20 verbose cache add name="body-parser" spec="~1.12.0" args=["body-parser","~1.12.0"]
+21 verbose parsed url { protocol: null,
+21 verbose parsed url   slashes: null,
+21 verbose parsed url   auth: null,
+21 verbose parsed url   host: null,
+21 verbose parsed url   port: null,
+21 verbose parsed url   hostname: null,
+21 verbose parsed url   hash: null,
+21 verbose parsed url   search: null,
+21 verbose parsed url   query: null,
+21 verbose parsed url   pathname: '~1.12.0',
+21 verbose parsed url   path: '~1.12.0',
+21 verbose parsed url   href: '~1.12.0' }
+22 verbose addNamed [ 'body-parser', '~1.12.0' ]
+23 verbose addNamed [ null, '>=1.12.0-0 <1.13.0-0' ]
+24 verbose cache add name="cookie-parser" spec="~1.3.4" args=["cookie-parser","~1.3.4"]
+25 verbose parsed url { protocol: null,
+25 verbose parsed url   slashes: null,
+25 verbose parsed url   auth: null,
+25 verbose parsed url   host: null,
+25 verbose parsed url   port: null,
+25 verbose parsed url   hostname: null,
+25 verbose parsed url   hash: null,
+25 verbose parsed url   search: null,
+25 verbose parsed url   query: null,
+25 verbose parsed url   pathname: '~1.3.4',
+25 verbose parsed url   path: '~1.3.4',
+25 verbose parsed url   href: '~1.3.4' }
+26 verbose addNamed [ 'cookie-parser', '~1.3.4' ]
+27 verbose addNamed [ null, '>=1.3.4-0 <1.4.0-0' ]
+28 verbose cache add name="debug" spec="~2.1.1" args=["debug","~2.1.1"]
+29 verbose parsed url { protocol: null,
+29 verbose parsed url   slashes: null,
+29 verbose parsed url   auth: null,
+29 verbose parsed url   host: null,
+29 verbose parsed url   port: null,
+29 verbose parsed url   hostname: null,
+29 verbose parsed url   hash: null,
+29 verbose parsed url   search: null,
+29 verbose parsed url   query: null,
+29 verbose parsed url   pathname: '~2.1.1',
+29 verbose parsed url   path: '~2.1.1',
+29 verbose parsed url   href: '~2.1.1' }
+30 verbose addNamed [ 'debug', '~2.1.1' ]
+31 verbose addNamed [ null, '>=2.1.1-0 <2.2.0-0' ]
+32 verbose cache add [ 'jade@~1.9.2', null ]
+33 verbose cache add name=undefined spec="jade@~1.9.2" args=["jade@~1.9.2",null]
+34 verbose parsed url { protocol: null,
+34 verbose parsed url   slashes: null,
+34 verbose parsed url   auth: null,
+34 verbose parsed url   host: null,
+34 verbose parsed url   port: null,
+34 verbose parsed url   hostname: null,
+34 verbose parsed url   hash: null,
+34 verbose parsed url   search: null,
+34 verbose parsed url   query: null,
+34 verbose parsed url   pathname: 'jade@~1.9.2',
+34 verbose parsed url   path: 'jade@~1.9.2',
+34 verbose parsed url   href: 'jade@~1.9.2' }
+35 verbose cache add name="express" spec="~4.12.2" args=["express","~4.12.2"]
+36 verbose parsed url { protocol: null,
+36 verbose parsed url   slashes: null,
+36 verbose parsed url   auth: null,
+36 verbose parsed url   host: null,
+36 verbose parsed url   port: null,
+36 verbose parsed url   hostname: null,
+36 verbose parsed url   hash: null,
+36 verbose parsed url   search: null,
+36 verbose parsed url   query: null,
+36 verbose parsed url   pathname: '~4.12.2',
+36 verbose parsed url   path: '~4.12.2',
+36 verbose parsed url   href: '~4.12.2' }
+37 verbose addNamed [ 'express', '~4.12.2' ]
+38 verbose addNamed [ null, '>=4.12.2-0 <4.13.0-0' ]
+39 verbose cache add [ 'mongoose-deep-populate@^3.0.0', null ]
+40 verbose cache add name=undefined spec="mongoose-deep-populate@^3.0.0" args=["mongoose-deep-populate@^3.0.0",null]
+41 verbose parsed url { protocol: null,
+41 verbose parsed url   slashes: null,
+41 verbose parsed url   auth: null,
+41 verbose parsed url   host: null,
+41 verbose parsed url   port: null,
+41 verbose parsed url   hostname: null,
+41 verbose parsed url   hash: null,
+41 verbose parsed url   search: null,
+41 verbose parsed url   query: null,
+41 verbose parsed url   pathname: 'mongoose-deep-populate@^3.0.0',
+41 verbose parsed url   path: 'mongoose-deep-populate@^3.0.0',
+41 verbose parsed url   href: 'mongoose-deep-populate@^3.0.0' }
+42 verbose cache add name="jade" spec="~1.9.2" args=["jade","~1.9.2"]
+43 verbose parsed url { protocol: null,
+43 verbose parsed url   slashes: null,
+43 verbose parsed url   auth: null,
+43 verbose parsed url   host: null,
+43 verbose parsed url   port: null,
+43 verbose parsed url   hostname: null,
+43 verbose parsed url   hash: null,
+43 verbose parsed url   search: null,
+43 verbose parsed url   query: null,
+43 verbose parsed url   pathname: '~1.9.2',
+43 verbose parsed url   path: '~1.9.2',
+43 verbose parsed url   href: '~1.9.2' }
+44 verbose addNamed [ 'jade', '~1.9.2' ]
+45 verbose addNamed [ null, '>=1.9.2-0 <1.10.0-0' ]
+46 silly lockFile ee522cbd-jade-1-9-2 jade@~1.9.2
+47 verbose lock jade@~1.9.2 /home/aravind/.npm/ee522cbd-jade-1-9-2.lock
+48 verbose cache add [ 'morgan@~1.5.1', null ]
+49 verbose cache add name=undefined spec="morgan@~1.5.1" args=["morgan@~1.5.1",null]
+50 verbose parsed url { protocol: null,
+50 verbose parsed url   slashes: null,
+50 verbose parsed url   auth: null,
+50 verbose parsed url   host: null,
+50 verbose parsed url   port: null,
+50 verbose parsed url   hostname: null,
+50 verbose parsed url   hash: null,
+50 verbose parsed url   search: null,
+50 verbose parsed url   query: null,
+50 verbose parsed url   pathname: 'morgan@~1.5.1',
+50 verbose parsed url   path: 'morgan@~1.5.1',
+50 verbose parsed url   href: 'morgan@~1.5.1' }
+51 verbose cache add name="mongoose-deep-populate" spec="^3.0.0" args=["mongoose-deep-populate","^3.0.0"]
+52 verbose parsed url { protocol: null,
+52 verbose parsed url   slashes: null,
+52 verbose parsed url   auth: null,
+52 verbose parsed url   host: null,
+52 verbose parsed url   port: null,
+52 verbose parsed url   hostname: null,
+52 verbose parsed url   hash: null,
+52 verbose parsed url   search: null,
+52 verbose parsed url   query: null,
+52 verbose parsed url   pathname: '^3.0.0',
+52 verbose parsed url   path: '^3.0.0',
+52 verbose parsed url   href: '^3.0.0' }
+53 verbose addNamed [ 'mongoose-deep-populate', '^3.0.0' ]
+54 verbose addNamed [ null, '>=3.0.0-0 <4.0.0-0' ]
+55 silly lockFile df65aec8-mongoose-deep-populate-3-0-0 mongoose-deep-populate@^3.0.0
+56 verbose lock mongoose-deep-populate@^3.0.0 /home/aravind/.npm/df65aec8-mongoose-deep-populate-3-0-0.lock
+57 verbose cache add name="morgan" spec="~1.5.1" args=["morgan","~1.5.1"]
+58 verbose parsed url { protocol: null,
+58 verbose parsed url   slashes: null,
+58 verbose parsed url   auth: null,
+58 verbose parsed url   host: null,
+58 verbose parsed url   port: null,
+58 verbose parsed url   hostname: null,
+58 verbose parsed url   hash: null,
+58 verbose parsed url   search: null,
+58 verbose parsed url   query: null,
+58 verbose parsed url   pathname: '~1.5.1',
+58 verbose parsed url   path: '~1.5.1',
+58 verbose parsed url   href: '~1.5.1' }
+59 verbose addNamed [ 'morgan', '~1.5.1' ]
+60 verbose addNamed [ null, '>=1.5.1-0 <1.6.0-0' ]
+61 silly lockFile 66ba047d-morgan-1-5-1 morgan@~1.5.1
+62 verbose lock morgan@~1.5.1 /home/aravind/.npm/66ba047d-morgan-1-5-1.lock
+63 verbose cache add [ 'multer@^0.1.8', null ]
+64 verbose cache add name=undefined spec="multer@^0.1.8" args=["multer@^0.1.8",null]
+65 verbose parsed url { protocol: null,
+65 verbose parsed url   slashes: null,
+65 verbose parsed url   auth: null,
+65 verbose parsed url   host: null,
+65 verbose parsed url   port: null,
+65 verbose parsed url   hostname: null,
+65 verbose parsed url   hash: null,
+65 verbose parsed url   search: null,
+65 verbose parsed url   query: null,
+65 verbose parsed url   pathname: 'multer@^0.1.8',
+65 verbose parsed url   path: 'multer@^0.1.8',
+65 verbose parsed url   href: 'multer@^0.1.8' }
+66 verbose cache add [ 'serve-favicon@~2.2.0', null ]
+67 verbose cache add name=undefined spec="serve-favicon@~2.2.0" args=["serve-favicon@~2.2.0",null]
+68 verbose parsed url { protocol: null,
+68 verbose parsed url   slashes: null,
+68 verbose parsed url   auth: null,
+68 verbose parsed url   host: null,
+68 verbose parsed url   port: null,
+68 verbose parsed url   hostname: null,
+68 verbose parsed url   hash: null,
+68 verbose parsed url   search: null,
+68 verbose parsed url   query: null,
+68 verbose parsed url   pathname: 'serve-favicon@~2.2.0',
+68 verbose parsed url   path: 'serve-favicon@~2.2.0',
+68 verbose parsed url   href: 'serve-favicon@~2.2.0' }
+69 verbose cache add name="multer" spec="^0.1.8" args=["multer","^0.1.8"]
+70 verbose parsed url { protocol: null,
+70 verbose parsed url   slashes: null,
+70 verbose parsed url   auth: null,
+70 verbose parsed url   host: null,
+70 verbose parsed url   port: null,
+70 verbose parsed url   hostname: null,
+70 verbose parsed url   hash: null,
+70 verbose parsed url   search: null,
+70 verbose parsed url   query: null,
+70 verbose parsed url   pathname: '^0.1.8',
+70 verbose parsed url   path: '^0.1.8',
+70 verbose parsed url   href: '^0.1.8' }
+71 verbose addNamed [ 'multer', '^0.1.8' ]
+72 verbose addNamed [ null, '>=0.1.8-0 <0.2.0-0' ]
+73 silly lockFile bbc8d2ec-multer-0-1-8 multer@^0.1.8
+74 verbose lock multer@^0.1.8 /home/aravind/.npm/bbc8d2ec-multer-0-1-8.lock
+75 verbose cache add name="serve-favicon" spec="~2.2.0" args=["serve-favicon","~2.2.0"]
+76 verbose parsed url { protocol: null,
+76 verbose parsed url   slashes: null,
+76 verbose parsed url   auth: null,
+76 verbose parsed url   host: null,
+76 verbose parsed url   port: null,
+76 verbose parsed url   hostname: null,
+76 verbose parsed url   hash: null,
+76 verbose parsed url   search: null,
+76 verbose parsed url   query: null,
+76 verbose parsed url   pathname: '~2.2.0',
+76 verbose parsed url   path: '~2.2.0',
+76 verbose parsed url   href: '~2.2.0' }
+77 verbose addNamed [ 'serve-favicon', '~2.2.0' ]
+78 verbose addNamed [ null, '>=2.2.0-0 <2.3.0-0' ]
+79 silly lockFile 9df5bad7-serve-favicon-2-2-0 serve-favicon@~2.2.0
+80 verbose lock serve-favicon@~2.2.0 /home/aravind/.npm/9df5bad7-serve-favicon-2-2-0.lock
+81 verbose cache add [ 'underscore@^1.8.3', null ]
+82 verbose cache add name=undefined spec="underscore@^1.8.3" args=["underscore@^1.8.3",null]
+83 verbose parsed url { protocol: null,
+83 verbose parsed url   slashes: null,
+83 verbose parsed url   auth: null,
+83 verbose parsed url   host: null,
+83 verbose parsed url   port: null,
+83 verbose parsed url   hostname: null,
+83 verbose parsed url   hash: null,
+83 verbose parsed url   search: null,
+83 verbose parsed url   query: null,
+83 verbose parsed url   pathname: 'underscore@^1.8.3',
+83 verbose parsed url   path: 'underscore@^1.8.3',
+83 verbose parsed url   href: 'underscore@^1.8.3' }
+84 verbose cache add name="underscore" spec="^1.8.3" args=["underscore","^1.8.3"]
+85 verbose parsed url { protocol: null,
+85 verbose parsed url   slashes: null,
+85 verbose parsed url   auth: null,
+85 verbose parsed url   host: null,
+85 verbose parsed url   port: null,
+85 verbose parsed url   hostname: null,
+85 verbose parsed url   hash: null,
+85 verbose parsed url   search: null,
+85 verbose parsed url   query: null,
+85 verbose parsed url   pathname: '^1.8.3',
+85 verbose parsed url   path: '^1.8.3',
+85 verbose parsed url   href: '^1.8.3' }
+86 verbose addNamed [ 'underscore', '^1.8.3' ]
+87 verbose addNamed [ null, '>=1.8.3-0 <2.0.0-0' ]
+88 silly lockFile 763d0bdd-underscore-1-8-3 underscore@^1.8.3
+89 verbose lock underscore@^1.8.3 /home/aravind/.npm/763d0bdd-underscore-1-8-3.lock
+90 silly lockFile ee522cbd-jade-1-9-2 jade@~1.9.2
+91 error Error: Attempt to unlock jade@~1.9.2, which hasn't been locked
+91 error     at unlock (/home/aravind/.nvm/v0.10.36/lib/node_modules/npm/lib/utils/locker.js:44:11)
+91 error     at cb (/home/aravind/.nvm/v0.10.36/lib/node_modules/npm/lib/cache/add-named.js:32:5)
+91 error     at /home/aravind/.nvm/v0.10.36/lib/node_modules/npm/lib/cache/add-named.js:41:20
+91 error     at /home/aravind/.nvm/v0.10.36/lib/node_modules/npm/lib/utils/locker.js:30:7
+91 error     at cb (/home/aravind/.nvm/v0.10.36/lib/node_modules/npm/node_modules/lockfile/lockfile.js:149:38)
+91 error     at /home/aravind/.nvm/v0.10.36/lib/node_modules/npm/node_modules/lockfile/lockfile.js:177:38
+91 error     at Object.oncomplete (fs.js:108:15)
+92 error If you need help, you may report this *entire* log,
+92 error including the npm and node versions, at:
+92 error     <http://github.com/npm/npm/issues>
+93 error System Linux 4.2.0-27-generic
+94 error command "/home/aravind/.nvm/v0.10.36/bin/node" "/home/aravind/.nvm/v0.10.36/bin/npm" "install"
+95 error cwd /home/aravind/Desktop/myproj/hostel-web-backend
+96 error node -v v0.10.36
+97 error npm -v 1.4.28
+98 verbose exit [ 1, true ]
