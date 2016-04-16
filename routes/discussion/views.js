@@ -77,6 +77,9 @@ var view_discussion_details_list = function(params, user) {
               var p = discussions[i].deepPopulate('approvedBy');
               plist.push(p);
             }
+            else {
+              plist.push(Q(discussions[i]));
+            }
           }
           debugger;
           Q.all(plist).then(function(_discussions) {
