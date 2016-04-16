@@ -1,6 +1,7 @@
 var Q = require("q");
 var ObjectId = require("mongoose").Types.ObjectId;
 var hat = require('hat');
+var _ = require('underscore');
 
 var view_complaint_details_create = function(params, user) {
   var deferred = Q.defer();
@@ -19,7 +20,7 @@ var view_complaint_details_create = function(params, user) {
 	}
   else {
     debugger;
-    if(user){
+    if(user) {
       var desc = params.description;
       delete params.access_token;
       delete params.description;
@@ -30,7 +31,13 @@ var view_complaint_details_create = function(params, user) {
       complaint.by = user._id.toString();
       complaint.save();
 
-      deferred.resolve({complaint: complaint});
+      complaint.deepPopulate('collaborators', function(err, _complaint) {
+          debugger;
+          var gcm = global.registry.getSharedObject('util').gcm;
+          var data = { complaint: _complaint, fromUser: user, type: "COMPLAINT_CREATE" };
+          gcm.gcmNotify(complaint.collaborators, data);
+          deferred.resolve({ complaint: _complaint });
+      });
     }
     else {
       deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
@@ -113,10 +120,17 @@ var view_complaint_details_approve = function(params, user) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such complaint."}, code:929}));
       }
       else if(complaint.status !== "Approved") {
-	complaint.status = "Approved";
+	      complaint.status = "Approved";
         complaint.approvedBy = user._id.toString();
         complaint.save();
-        deferred.resolve(complaint);
+
+        complaint.deepPopulate('by', function(err, _complaint) {
+          var gcm = global.registry.getSharedObject('util').gcm;
+          var data = { complaint: _complaint, approvedBy: user, type: "COMPLAINT_APPROVE" };
+          gcm.gcmNotify([_complaint.by], data);
+
+          deferred.resolve(_complaint);
+        });
       }
       else {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"This complaint is already approved."}, code:387}));
@@ -161,7 +175,22 @@ var view_complaint_details_message = function(params, user) {
         complaint.markModified("messages");
 
         complaint.save();
-        deferred.resolve({message: message});
+        complaint.deepPopulate('by collaborators', function(err, _complaint) {
+          var gcm = global.registry.getSharedObject('util').gcm;
+          var data = { message: message, fromUser: user, type: "COMPLAINT_MESSAGE" };
+
+          var members = _.complaint.collaborators;
+          members.push(_complaint.by);
+
+          // The user who sent the message should not receive the notification
+          var _members  = _.filter(members, function(ele) {
+            return ( ele._id.toString !== user._id.toString() )
+          });
+
+          gcm.gcmNotify(_members, data);
+
+          deferred.resolve({ message: message });
+        });
       }
     });
   }

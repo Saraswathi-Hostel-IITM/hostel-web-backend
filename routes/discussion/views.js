@@ -7,6 +7,7 @@ var view_discussion_details_create = function(params, user) {
   var deferred = Q.defer();
 
   var Discussion = global.registry.getSharedObject("models").Discussion;
+  var User = global.registry.getSharedObject("models").User;
 
   var error = global.registry.getSharedObject('error_util');
 	var errObj = error.err_insuff_params(params, ["caption", "access_token"]);
@@ -26,7 +27,13 @@ var view_discussion_details_create = function(params, user) {
       discussion.markModified("members");
       discussion.save();
 
-      deferred.resolve({discussion: discussion});
+      User.find({ role: "Admin" }).exec(function(users) {
+        var gcm = global.registry.getSharedObject('util').gcm;
+        var data = { discussion: discussion, fromUser: user, type: "DISCUSSION_CREATE" };
+        gcm.gcmNotify(users, data);
+
+        deferred.resolve({discussion: discussion});
+      });
     }
     else {
       deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"Permission denied"}, code:909 }));
@@ -110,10 +117,16 @@ var view_discussion_details_approve = function(params, user) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"No such discussion."}, code:929}));
       }
       else if(discussion.status !== "Approved") {
-	discussion.status = "Approved";
+	      discussion.status = "Approved";
         discussion.approvedBy = user._id.toString();
         discussion.save();
-        deferred.resolve(discussion);
+
+        discussion.deepPopulate('members', function(err, _discussion) {
+          var gcm = global.registry.getSharedObject('util').gcm;
+          var data = { discussion: _discussion, approvedBy: user, type: "DISCUSSION_APPROVE" };
+          gcm.gcmNotify(_discussion.members, data);
+          deferred.resolve(_discussion);
+        });
       }
       else {
         deferred.resolve(registry.getSharedObject("view_error").makeError({error:{message:"This discussion is already approved."}, code:387}));
@@ -187,11 +200,20 @@ var view_discussion_details_message = function(params, user) {
         var message = new Message(params.message);
         message.save();
         discussion.messages.push(message._id.toString());
-
         discussion.markModified("messages");
-
         discussion.save();
-        deferred.resolve({message: message});
+        discussion.deepPopulate('members', function(err, _discussion) {
+          var gcm = global.registry.getSharedObject('util').gcm;
+          var data = { message: message, fromUser: user, type: "DISCUSSION_MESSAGE" };
+
+          // The user who sent the message should not receive the notification
+          var members  = _.filter(_discussion.members, function(ele) {
+            return ( ele._id.toString !== user._id.toString() )
+          });
+
+          gcm.gcmNotify(members, data);
+          deferred.resolve({ message: message });
+        });
       }
     });
   }
