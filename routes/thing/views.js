@@ -11,6 +11,7 @@ var view_thing_details_create = function(params, user) {
 	var errObj = error.err_insuff_params(params, ["access_token", "data"]);
 
 	debugger;
+  console.log(params);
 
 	if(errObj) {
 		//throw error here
@@ -29,7 +30,7 @@ var view_thing_details_create = function(params, user) {
   return deferred.promise;
 }
 
-global.registry.register('view_thing_details_create', { post: view_thing_details_create });
+global.registry.register('view_thing_details_create', { get: view_thing_details_create });
 
 var view_thing_details_get = function(params) {
   var deferred = Q.defer();
