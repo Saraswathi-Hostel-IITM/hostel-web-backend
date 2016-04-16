@@ -84,7 +84,7 @@ var view_complaint_details_list = function(params, user) {
               plist.push(p);
             }
             else {
-              plist.push(complaints[i].deepPopulate('by'););
+              plist.push(complaints[i].deepPopulate('by'));
             }
           }
           debugger;
