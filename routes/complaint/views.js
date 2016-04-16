@@ -83,6 +83,9 @@ var view_complaint_details_list = function(params, user) {
               var p = complaints[i].deepPopulate('approvedBy');
               plist.push(p);
             }
+            else {
+              plist.push(Q(complaints[i]));
+            }
           }
           debugger;
           Q.all(plist).then(function(_complaints) {
