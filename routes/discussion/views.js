@@ -73,12 +73,14 @@ var view_discussion_details_list = function(params, user) {
           var plist = [];
 
           for(var i=0; i < discussions.length; ++i) {
+            // NOTE: Populating "by" user in discussion ( members[0] )
+            discussions[i].by = discussions[i].members[0];
             if(discussions[i]['approvedBy']) {
-              var p = discussions[i].deepPopulate('approvedBy');
+              var p = discussions[i].deepPopulate('approvedBy by');
               plist.push(p);
             }
             else {
-              plist.push(Q(discussions[i]));
+              plist.push(discussions[i].deepPopulate('by'));
             }
           }
           debugger;

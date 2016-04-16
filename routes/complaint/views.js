@@ -80,11 +80,11 @@ var view_complaint_details_list = function(params, user) {
           var plist = [];
           for(var i=0; i < complaints.length; ++i) {
             if(complaints[i]['approvedBy']) {
-              var p = complaints[i].deepPopulate('approvedBy');
+              var p = complaints[i].deepPopulate('approvedBy by');
               plist.push(p);
             }
             else {
-              plist.push(Q(complaints[i]));
+              plist.push(complaints[i].deepPopulate('by'););
             }
           }
           debugger;
