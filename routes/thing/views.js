@@ -11,7 +11,6 @@ var view_thing_details_create = function(params, user) {
 	var errObj = error.err_insuff_params(params, ["access_token", "data"]);
 
 	debugger;
-  console.log(params);
 
 	if(errObj) {
 		//throw error here
@@ -21,6 +20,7 @@ var view_thing_details_create = function(params, user) {
     debugger;
     if(user && user.role === "Admin") {
       var thing = new Thing(params.data);
+      thing.save();
       deferred.resolve(thing);
     }
     else {
