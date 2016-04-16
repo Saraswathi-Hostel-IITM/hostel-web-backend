@@ -59,6 +59,9 @@ var gcm = require('node-gcm-service');
 
 var gcmNotify = function(users, data){
     var regIds = [];
+		if(!users) {
+			return;
+		}
     users.forEach(function(current, pos, array) {
         var gcmId = current.details.properties.gcmId;
         regIds.push(gcmId);

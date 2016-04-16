@@ -166,3 +166,16 @@ var view_user_details_update = function(params, user) {
 }
 
 global.registry.register('view_user_details_update', {post : view_user_details_update});
+
+var view_user_list_admin = function(params, user) {
+	var deferred = Q.defer();
+
+	var User = global.registry.getSharedObject("models").User;
+	User.find({ role: "Admin" }).exec().then(function(admins) {
+		deferred.resolve(admins);
+	});
+
+	return deferred.promise;
+}
+
+global.registry.register('view_user_list_admin', { get: view_user_list_admin });
