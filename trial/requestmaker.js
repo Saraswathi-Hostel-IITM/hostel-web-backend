@@ -4,9 +4,9 @@ var qs = require('qs');
 
 for( d in data ) {
   var options = {
-    host: 'localhost',
-    port: 4000,
-    path: '/thing/details/create?' + qs.stringify({data: data[d]})
+    host: '54.169.0.11',
+    port: 8000,
+    path: '/thing/details/create?' + qs.stringify({access_token: "e5c6de0b282780366f4ed45bdff01240", data: data[d]})
   };
   http.get(options, function(resp){
     resp.on('data', function(chunk){
