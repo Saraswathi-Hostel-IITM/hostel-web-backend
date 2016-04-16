@@ -1,6 +1,7 @@
 var Q = require("q");
 var ObjectId = require("mongoose").Types.ObjectId;
 var hat = require('hat');
+var _ = require('underscore');
 
 var view_discussion_details_create = function(params, user) {
   var deferred = Q.defer();
@@ -51,7 +52,7 @@ var view_discussion_details_list = function(params, user) {
     //throw error here
     deferred.resolve(errObj);
   }
-  
+
   else{
     if(user){
       // if(user.role !== "Admin") criteria["approvedBy"] = { "$exists": true };
@@ -63,6 +64,7 @@ var view_discussion_details_list = function(params, user) {
         else {
           debugger;
           var plist = [];
+
           for(var i=0; i < discussions.length; ++i) {
             if(discussions[i]['approvedBy']) {
               var p = discussions[i].deepPopulate('approvedBy');
@@ -71,7 +73,11 @@ var view_discussion_details_list = function(params, user) {
           }
           debugger;
           Q.all(plist).then(function(_discussions) {
-            deferred.resolve(_discussions);
+            arr = _.partition(_discussions, function(ele) {
+              return ( ele.members.indexOf(user._id.toString()) != -1 )
+            });
+            var obj = { 'joined': arr[0], 'unjoined': arr[1] };
+            deferred.resolve(obj);
           });
         }
       });
