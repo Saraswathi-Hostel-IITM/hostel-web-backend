@@ -59,13 +59,18 @@ var gcm = require('node-gcm-service');
 
 var gcmNotify = function(users, data){
     var regIds = [];
-		if(!users) {
+		if(!users || !users.length) {
 			return;
 		}
     users.forEach(function(current, pos, array) {
-        var gcmId = current.details.properties.gcmId;
-        regIds.push(gcmId);
+				if(current.details && current.details.properties && current.details.properties.gcmId) {
+	        var gcmId = current.details.properties.gcmId;
+	        regIds.push(gcmId);
+				}
     });
+		if(!regIds.length) {
+			return;
+		}
     var message = new gcm.Message({
         collapse_key: 'saras_hostel_iitm',
         delay_while_idle: true,
