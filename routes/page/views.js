@@ -106,6 +106,7 @@ var view_page_thing_create = function(params, user) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such page."}, code:994 }));
       } else {
         var thing = new Thing(params.data);
+        thing.save();
         page.things.push(thing._id.toString());
         page.markModified("things");
         page.save();
