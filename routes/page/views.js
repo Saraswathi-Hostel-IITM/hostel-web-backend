@@ -20,7 +20,7 @@ var view_page_post_create = function(params, user) {
     var Post = global.registry.getSharedObject("models").Post;
     var Page = global.registry.getSharedObject("models").Page;
 
-    Page.find({ tag: params.tag }).exec().then(function(page) {
+    Page.findOne({ tag: params.tag }).exec().then(function(page) {
       if(!page) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such page."}, code:994 }));
       } else {
@@ -101,7 +101,7 @@ var view_page_thing_create = function(params, user) {
     var Thing = global.registry.getSharedObject("models").Thing;
     var Page = global.registry.getSharedObject("models").Page;
 
-    Page.find({ tag: params.tag }).exec().then(function(page) {
+    Page.findOne({ tag: params.tag }).exec().then(function(page) {
       if(!page) {
         deferred.resolve(registry.getSharedObject("view_error").makeError({ error:{message:"No such page."}, code:994 }));
       } else {
@@ -180,7 +180,7 @@ var view_page_details_get = function(params, user) {
   } else {
     var Page = global.registry.getSharedObject("models").Page;
 
-    Page.find({ tag: params.tag }).exec().then(function(page) {
+    Page.findOne({ tag: params.tag }).exec().then(function(page) {
       page.deepPopulate('things posts', function(err, _page) {
         deferred.resolve(_page);
       });
