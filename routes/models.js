@@ -17,7 +17,8 @@ var userSchema = new Schema({
 	dateUpdated: { type: Date, default: Date.now },
   dateLastLogin: { type: Date },
 	dateLastLogout: { type: Date },
-	details: {}
+	details: {},
+  permissions: [ String ]
 });
 userSchema.plugin(deepPopulate, {});
 Models.User = mongoose.model('User', userSchema);
@@ -65,6 +66,22 @@ Models.Thing = mongoose.model('Thing', new Schema({
 	key: String,
 	value: {}
 }))
+
+Models.Post =  mongoose.model('Post', new Schema({
+  caption: String,
+  description: String,
+  url: String,
+  details: {}
+}));
+
+var pageSchema = new Schema({
+  type: { type: String, default: 'DEFAULT' },
+  tag: String,
+  things: [ { type: Schema.Types.ObjectId, ref: 'Thing' } ],
+  posts: [ { type: Schema.Types.ObjectId, ref: 'Post' } ]
+});
+pageSchema.plugin(deepPopulate, {});
+Models.Page = mongoose.model('Page', pageSchema);
 
 module.exports = Models;
 

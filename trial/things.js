@@ -41,7 +41,7 @@ module.exports = [{
 {
 	type: 'GALLERY',
 	key: '10406844_1590454071232315_5546734146791983789_n.jpg',
-	value: 'https://lh5.googleusercontent.com/CKbe_JJ2jUngIuO5zNdh6vw1rSJ067gj-ZYmmmqauadDkP1j1Mq9-2sTgZ2zXvv6lIe3YQ=s190'
+	value: 'https://lh4.googleusercontent.com/Je3N3HoOQYzUHi6R2v1AElG4pZvFVOjc2lpHUiEQJVgXAYVdaP4EHzrUC3AvvZKGXNpwMA=s190'
 },
 {
 	type: 'GALLERY',
